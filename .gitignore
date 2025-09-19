@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/NotesModule/bin/Debug/net8.0
+/NotesModule/obj
+/NotesModule.Application/bin/Debug/net8.0
+/NotesModule.Application/obj/Debug/net8.0
+/NotesModule.Application/obj
+/NotesModule.Domain/bin/Debug/net8.0
+/NotesModule.Domain/obj/Debug/net8.0
+/NotesModule.Domain/obj
+/NotesModule.Infrastructure/bin/Debug/net8.0
+/NotesModule.Infrastructure/obj/Debug/net8.0
+/NotesModule.Infrastructure/obj
