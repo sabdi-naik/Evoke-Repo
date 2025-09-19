@@ -1,0 +1,94 @@
+﻿@page "/add-edit-notes"
+@page "/add-edit-notes/{id:int}"
+@using NotesModule.Application.Interfaces
+@using NotesModule.Domain.Entities
+@inject INotesService NotesService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3>@(note.NotesId == 0 ? "Add Note" : "Edit Note")</h3>
+
+<EditForm Model="@note" OnValidSubmit="HandleValidSubmit" FormName="AddEditNoteForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText class="form-control" @bind-Value="note.Title" />        
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <InputText class="form-control" @bind-Value="note.Description" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Priority</label>
+        <InputSelect class="form-control" @bind-Value="note.Priority">
+            <option value="">-- Select Priority --</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </InputSelect>
+
+    </div>
+
+    @*   <div class="mb-3">
+        <label class="form-label">Created By</label>
+        <InputText class="form-control" @bind-Value="note.CreatedBy" />
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Created Date</label>
+        <InputDate class="form-control" @bind-Value="note.CreatedDateTime" />
+
+    </div> *@
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="GoBack">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter] public int? id { get; set; }
+
+    private NotesModel note = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (id.HasValue && id.Value > 0)
+        {
+            var existingNote = await NotesService.GetNotesByIdAsync(id.Value);
+            if (existingNote != null)
+            {
+                note = existingNote;
+            }
+
+        } 
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+        if (note.NotesId == 0)
+        {
+            note.CreatedBy = "User";
+            note.CreatedDateTime = DateTime.Now;
+            note.IsDeleted = true;
+            await NotesService.AddNotesAsync(note);
+        }
+        else
+        {
+            note.ModifiedBy = "User";
+            note.ModifiedDateTime = DateTime.Now;
+            await NotesService.UpdateNotesAsync(note);
+        }
+
+        Navigation.NavigateTo("/notes");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/notes");
+    }
+}

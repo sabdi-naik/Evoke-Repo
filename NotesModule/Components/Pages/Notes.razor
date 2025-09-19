@@ -1,0 +1,83 @@
+﻿@page "/notes"
+@using NotesModule.Application.Interfaces
+@using NotesModule.Domain.Entities
+@inject INotesService NotesService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3>Notes</h3>
+
+@if (notes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div style="text-align: right;padding-right: 42px;">
+        <a href='/add-edit-notes' class="btn  btn-sm btn-primary" style="width:50px;" role="button">
+            Add
+        </a>
+    </div>
+    <div>
+        <table class="table" style="border:2px;">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description </th>
+                    <th>Priority </th>
+                    <th>Created By</th>
+                    <th>Created Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var note in notes)
+                {
+                    <tr>
+                        <td>@note.Title</td>
+                        <td>@note.Description</td>
+                        <td style="color: @(note.Priority == "High" ? "red" : note.Priority == "Medium" ? "orange" : "green");font-weight: bold">
+                            @note.Priority
+                        </td>
+                        <td>@note.CreatedBy</td>
+                        <td>@note.CreatedDateTime.ToString("yyyy-dd-MM")</td>
+                        <td>
+                            <a href='/add-edit-notes/@note.NotesId' class="btn btn-sm btn-success" role="button">
+                                Edit
+                            </a>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteNote(note.NotesId)">Delete</button>
+                        </td>
+                    </tr>
+                }
+                @if (notes?.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" style="text-align:center"> No Notes Available</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private IList<NotesModel>? notes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        notes = await NotesService.GetAllNotesAsync();
+    }
+    private void NavigateToEdit(int id)
+    {
+
+        Navigation.NavigateTo($"/add-edit-notes/{id}");
+    }
+    private async Task DeleteNote(int id)
+    {
+        await NotesService.DeleteNotesAsync(id);
+        notes = await NotesService.GetAllNotesAsync();
+    }
+
+}
+

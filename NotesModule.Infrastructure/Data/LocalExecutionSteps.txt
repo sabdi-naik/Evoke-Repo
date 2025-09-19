@@ -1,0 +1,2 @@
+﻿1. Run Command to Create/Update Tables : Add-Migration AddNotesInitialMigration
+2. Run Command to Apply Migrations : Update-Database 
