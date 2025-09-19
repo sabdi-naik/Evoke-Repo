@@ -21,10 +21,11 @@ namespace NotesModule.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var product = await _context.Notes.FindAsync(id);
-            if (product != null)
+            var notes = await _context.Notes.FindAsync(id);
+            if (notes != null)
             {
-                _context.Notes.Remove(product);
+                notes.IsDeleted = false;
+                notes.ModifiedDateTime = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
             }
         }        
