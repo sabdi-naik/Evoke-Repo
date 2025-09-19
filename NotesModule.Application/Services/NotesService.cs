@@ -20,27 +20,27 @@ namespace NotesModule.Application.Services
 
         public async Task<IList<NotesModel>> GetAllNotesAsync()
         {
-            return await _notesRepository.GetAllAsync();
+            return await _notesRepository.GetAllNotesAsync();
         }
 
         public async Task<NotesModel> GetNotesByIdAsync(int id)
         {
-            return await _notesRepository.GetByIdAsync(id);
+            return await _notesRepository.GetNotesByIdAsync(id);
         }
 
         public async Task AddNotesAsync(NotesModel notesModel)
         {
-            await _notesRepository.AddAsync(notesModel);
+            await _notesRepository.AddNotesAsync(notesModel);
         }
 
         public async Task UpdateNotesAsync(NotesModel notesModel)
         {
-            await _notesRepository.UpdateAsync(notesModel);
+            await _notesRepository.UpdateNotesAsync(notesModel);
         }
 
         public async Task DeleteNotesAsync(int id)
         {
-            await _notesRepository.DeleteAsync(id);
+            await _notesRepository.DeleteNotesAsync(id);
         }
     }
 }

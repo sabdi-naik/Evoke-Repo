@@ -13,13 +13,13 @@ namespace NotesModule.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(NotesModel notes)
+        public async Task AddNotesAsync(NotesModel notes)
         {
             _context.Notes.Add(notes);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteNotesAsync(int id)
         {
             var notes = await _context.Notes.FindAsync(id);
             if (notes != null)
@@ -30,18 +30,18 @@ namespace NotesModule.Infrastructure.Repositories
             }
         }        
 
-        public async Task<NotesModel> GetByIdAsync(int id)
+        public async Task<NotesModel> GetNotesByIdAsync(int id)
         {
             return await _context.Notes.FindAsync(id);
         }
 
-        public async Task UpdateAsync(NotesModel notes)
+        public async Task UpdateNotesAsync(NotesModel notes)
         {
             _context.Notes.Update(notes);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IList<NotesModel>>  GetAllAsync()
+        public async Task<IList<NotesModel>>  GetAllNotesAsync()
         {
             return await _context.Notes.OrderByDescending(x => x.CreatedDateTime).
                 Where(x => x.IsDeleted == true).ToListAsync();
